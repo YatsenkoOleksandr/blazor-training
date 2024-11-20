@@ -69,9 +69,9 @@ The value of the parameter can be any C# expression.
 
 ```
 @code {
-	[Parameter]
-	public int IncrementAmount { get; set; } = 1;
-	...
+ [Parameter]
+ public int IncrementAmount { get; set; } = 1;
+ ...
 }
 
 ...
@@ -81,7 +81,7 @@ The value of the parameter can be any C# expression.
 The `@code` block in a Razor file is used to add C# class members (fields, properties, and methods) to a component.
 You can use the `@code` to keep track of component state, add component parameters, implement component lifecycle events, and define event handlers.
 
-### Render C# expression values 
+### Render C# expression values
 
 To evaluate C# expression in Razor use a leading `@` character:
 
@@ -145,4 +145,42 @@ Event handlers can be asynchronous.
 
 ### Data Binding
 
-Blazor 
+Blazor provides ability to bind the value of UI element to a particular value.
+When the value of the UI element changes, the code value should change as well, and vice verse.
+Blazor provides two-way data binding using `@bind` attribute:
+
+```
+<input @bind="text" />
+<buttin @onclick="() => text = string.Empty">Clear</button>
+<p>@text</p>
+
+@code {
+    string text = "";
+}
+```
+
+### Interactivity
+
+To handle UI events from a component and to use data binding, the component must be **interactive**.
+By default, Blazor components render statically from the server: they generate HTML in response to requests.
+
+To make a component interactive need to apply render mode using `@rendermode` directive.
+
+Render mode applied to a component definition:
+
+```
+@rendermode InteractiveServer
+```
+
+Render mode applied to a component instance:
+
+```
+<Counter @rendermode="InteractiveServer" />
+```
+
+Interactive server rendering handles UI events from the server over a WebSocket connection with the browser.
+Blazor sends UI events to the server over this connection so that the app's components can handle them.
+Blazor then handles updating the browser DOM with the rendered updates.
+
+Alternatively, Blazor components can use the `InteractiveWebAssembly` render mode to render interactively from the client.
+In this mode, the component code is downloaded to the browser and run client-side using a WebAssembly-based .NET runtime.
