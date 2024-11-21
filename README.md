@@ -1,5 +1,19 @@
 # Blazor Intro
 
+- [Blazor Intro](#blazor-intro)
+  - [How Blazor Works](#how-blazor-works)
+  - [When to use Blazor](#when-to-use-blazor)
+  - [Simple Blazor project structure](#simple-blazor-project-structure)
+  - [Razor Component](#razor-component)
+    - [Render C# expression values](#render-c-expression-values)
+    - [Control flow](#control-flow)
+    - [Event Handling](#event-handling)
+    - [Data Binding](#data-binding)
+    - [Interactivity](#interactivity)
+  - [Hosting Models](#hosting-models)
+  - [Interacting with data](#interacting-with-data)
+
+
 Blazor is a framework based on HTML, CSS and C#.
 Blazor helps to build web app using reusable components that can be run from both the client and server.
 
@@ -111,6 +125,10 @@ Loop over data:
 </ul>
 ```
 
+Blazor includes other looping directives, such as `@for`, `@while`, and `@do while`.
+These directives return repeated blocks of markup.
+They work in a similar way to the equivalent C# `for`, `while`, and `do...while` loops.
+
 ### Event Handling
 
 To specify an event handler use an attribute that starts with `@on` and ends with event name:
@@ -184,3 +202,44 @@ Blazor then handles updating the browser DOM with the rendered updates.
 
 Alternatively, Blazor components can use the `InteractiveWebAssembly` render mode to render interactively from the client.
 In this mode, the component code is downloaded to the browser and run client-side using a WebAssembly-based .NET runtime.
+
+## Hosting Models
+
+1. **Blazor Server**
+
+   In this model, the app is executed on the web server within an ASP.NET Core app.
+   UI updates, events, and JavaScript calls on the client side are sent through a SingalR connection between the client and the server.
+2. **Blazor WebAssembly**
+
+   In this model, the Blazor app, its dependencies, and the .NET runtime are downloaded and run on the browser.
+
+## Interacting with data
+
+In a Blazor Server app, you can create a registered service to represent a data source and obtain data from it.
+The sources of data you can use in a Blazor app include relational databases, NoSQL databases, web services, various Azure services, and many other systems.
+
+Before you can call the service from the component, you must use dependency injection to add the service. Inject the service by adding the following code after the `@page` directive:
+
+```
+@using BlazingPizza.Data
+@inject PizzaService PizzaSvc
+```
+
+`@using` directive works in the same way as `using` statement at the top of a C# code file.
+
+`@inject` directive adds the service to the current component and initiates an instance of it.
+In the directive need to specify the service class name, and the instance name of the service inside the component:
+
+```
+@using [Service Class Name] [local variable name]
+```
+
+`OnInitializedAsync` event fires when component's initialization is completed and it has received initial parameters, but before the page is rendered and displayed to the user.
+This method is a good place to fetch the data.
+
+```
+protected override async Task OnInitializedAsync()
+{
+    // Call the service here
+}
+```
